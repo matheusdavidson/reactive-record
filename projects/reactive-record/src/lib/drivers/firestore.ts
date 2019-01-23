@@ -4,7 +4,7 @@ import { RRDriver } from '../interfaces/rr-driver';
 import { RRRequest } from '../interfaces/rr-request';
 import { RRExtraOptions } from '../interfaces/rr-extra-options';
 import { Observable, PartialObserver, race } from 'rxjs';
-import { get, merge, isEmpty, isArray } from 'lodash';
+import { get, merge, isEmpty, isArray, isNil } from 'lodash';
 
 import { RRConnector } from '../interfaces/rr-connector';
 import { RROptions } from '../interfaces/rr-options';
@@ -42,7 +42,7 @@ export class RRFirestoreDriver extends RRHooks implements RRDriver {
         query[0].value
       );
       query.map(q => {
-        if (!q.value) throw Error(`value can't be null for firestore where`);
+        if (isNil(q.value)) throw Error(`value can't be null for firestore where`);
         firestore = firestore.where(q.field, q.operator, q.value);
       });
     } else if (
